@@ -2,20 +2,25 @@
 // SagaFlow — Fastify Server Setup
 // ============================================================
 // Creates and configures the Fastify application instance with
-// logging, error handling, and graceful shutdown.
+// logging, error handling, database connections, and routes.
 // ============================================================
 
 import Fastify, { type FastifyInstance } from 'fastify';
-import { type AppConfig } from '../config/index.js';
-import { registerHealthRoute } from '../api/routes/health.js';
+import { type AppConfig } from './config/index.js';
+import { createPool, initializeSchema } from './persistence/database.js';
+import { createRedisClient } from './persistence/redis.js';
+import { registerHealthRoute } from './api/routes/health.js';
 
 /**
  * Build and configure the Fastify application.
  *
- * This function creates the Fastify instance but does NOT start
- * listening. Call `app.listen()` separately to start the server.
+ * Initializes database connections, schema, and registers all routes.
+ * Set `skipDb` to true for unit tests that don't need real connections.
  */
-export async function buildApp(config: AppConfig): Promise<FastifyInstance> {
+export async function buildApp(
+  config: AppConfig,
+  options: { skipDb?: boolean } = {}
+): Promise<FastifyInstance> {
   const app = Fastify({
     logger: {
       level: config.logLevel,
@@ -32,6 +37,25 @@ export async function buildApp(config: AppConfig): Promise<FastifyInstance> {
           : undefined,
     },
   });
+
+  // ── Database connections ────────────────────────────────
+  if (!options.skipDb) {
+    try {
+      // PostgreSQL
+      const pool = createPool(config);
+      await initializeSchema(pool);
+      app.decorate('dbPool', pool);
+      app.log.info('PostgreSQL: connected and schema initialized');
+
+      // Redis
+      const redis = createRedisClient(config);
+      app.decorate('redis', redis);
+      app.log.info('Redis: client created');
+    } catch (err) {
+      app.log.error({ err }, 'Failed to initialize database connections');
+      throw err;
+    }
+  }
 
   // ── Global error handler ──────────────────────────────────
   app.setErrorHandler((error, request, reply) => {

@@ -3,13 +3,15 @@
 // ============================================================
 // Bootstraps the SagaFlow application:
 // 1. Loads and validates configuration
-// 2. Builds the Fastify app
+// 2. Builds the Fastify app (with DB connections)
 // 3. Starts listening for HTTP requests
 // 4. Handles graceful shutdown
 // ============================================================
 
 import { loadConfig } from './config/index.js';
 import { buildApp } from './app.js';
+import { closePool } from './persistence/database.js';
+import { closeRedisClient } from './persistence/redis.js';
 
 async function main(): Promise<void> {
   // ── Load configuration ──────────────────────────────────
@@ -24,7 +26,9 @@ async function main(): Promise<void> {
 
     try {
       await app.close();
-      app.log.info('Server closed');
+      await closeRedisClient();
+      await closePool();
+      app.log.info('All connections closed. Goodbye.');
       process.exit(0);
     } catch (err) {
       app.log.error({ err }, 'Error during shutdown');

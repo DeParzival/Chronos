@@ -11,7 +11,7 @@ describe('Health Check Endpoint', () => {
   let app: FastifyInstance;
 
   const testConfig: AppConfig = {
-    port: 0, // random port for tests
+    port: 0,
     nodeEnv: 'test',
     logLevel: 'error',
     databaseUrl: 'postgresql://sagaflow:sagaflow@localhost:5432/sagaflow',
@@ -19,7 +19,8 @@ describe('Health Check Endpoint', () => {
   };
 
   beforeAll(async () => {
-    app = await buildApp(testConfig);
+    // skipDb: true — unit tests don't need real DB connections
+    app = await buildApp(testConfig, { skipDb: true });
   });
 
   afterAll(async () => {
@@ -32,7 +33,7 @@ describe('Health Check Endpoint', () => {
       url: '/health',
     });
 
-    expect(response.statusCode).toBe(503); // unhealthy — no connections yet
+    expect(response.statusCode).toBe(503); // unhealthy — no connections
     const body = response.json();
 
     expect(body).toHaveProperty('status');
@@ -44,7 +45,7 @@ describe('Health Check Endpoint', () => {
     expect(body.services).toHaveProperty('redis');
   });
 
-  it('should report services as disconnected before connections are established', async () => {
+  it('should report services as disconnected when skipDb is true', async () => {
     const response = await app.inject({
       method: 'GET',
       url: '/health',
