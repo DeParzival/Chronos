@@ -1,0 +1,132 @@
+# ============================================================
+# SagaFlow — Docker Compose
+# ============================================================
+# Complete local development environment:
+# - SagaFlow orchestration engine
+# - PostgreSQL (durable persistence)
+# - Redis (fast coordination)
+# - Mock microservices (payment, inventory, shipping)
+# ============================================================
+
+services:
+  # ── SagaFlow Engine ──────────────────────────────────────
+  sagaflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sagaflow
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      LOG_LEVEL: info
+      DATABASE_URL: postgresql://sagaflow:sagaflow@postgres:5432/sagaflow
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - sagaflow-network
+
+  # ── PostgreSQL ───────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: sagaflow-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: sagaflow
+      POSTGRES_PASSWORD: sagaflow
+      POSTGRES_DB: sagaflow
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sagaflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - sagaflow-network
+
+  # ── Redis ────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: sagaflow-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - sagaflow-network
+
+  # ── Mock Payment Service ─────────────────────────────────
+  # Placeholder — will be fully implemented in Phase 8
+  payment-service:
+    image: node:20-alpine
+    container_name: sagaflow-payment
+    working_dir: /app
+    volumes:
+      - ./services/payment-service:/app
+    command: sh -c "[ -f package.json ] && npm install && node index.js || echo 'Payment service placeholder — implement in Phase 8' && tail -f /dev/null"
+    ports:
+      - "4001:4001"
+    environment:
+      PORT: 4001
+      SERVICE_NAME: payment-service
+    networks:
+      - sagaflow-network
+
+  # ── Mock Inventory Service ───────────────────────────────
+  inventory-service:
+    image: node:20-alpine
+    container_name: sagaflow-inventory
+    working_dir: /app
+    volumes:
+      - ./services/inventory-service:/app
+    command: sh -c "[ -f package.json ] && npm install && node index.js || echo 'Inventory service placeholder — implement in Phase 8' && tail -f /dev/null"
+    ports:
+      - "4002:4002"
+    environment:
+      PORT: 4002
+      SERVICE_NAME: inventory-service
+    networks:
+      - sagaflow-network
+
+  # ── Mock Shipping Service ────────────────────────────────
+  shipping-service:
+    image: node:20-alpine
+    container_name: sagaflow-shipping
+    working_dir: /app
+    volumes:
+      - ./services/shipping-service:/app
+    command: sh -c "[ -f package.json ] && npm install && node index.js || echo 'Shipping service placeholder — implement in Phase 8' && tail -f /dev/null"
+    ports:
+      - "4003:4003"
+    environment:
+      PORT: 4003
+      SERVICE_NAME: shipping-service
+    networks:
+      - sagaflow-network
+
+# ── Volumes ──────────────────────────────────────────────
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
+
+# ── Networks ─────────────────────────────────────────────
+networks:
+  sagaflow-network:
+    driver: bridge

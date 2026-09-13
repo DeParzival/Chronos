@@ -1,0 +1,40 @@
+# Dependencies
+node_modules
+
+# Build output (rebuilt in Docker)
+dist
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+
+# Tests (not needed in production image)
+tests
+vitest.config.ts
+coverage
+
+# Documentation
+docs
+*.md
+!README.md
+
+# Docker (avoid recursive context)
+docker-compose.yml
+Dockerfile
+
+# Environment files
+.env
+.env.local
+.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Services (separate images)
+services
