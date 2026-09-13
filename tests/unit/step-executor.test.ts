@@ -14,7 +14,7 @@ describe('StepExecutor', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    mockServer = Fastify({ logger: false });
+    mockServer = Fastify({ logger: false, forceCloseConnections: true });
 
     // ── Success endpoint ────────────────────────────────
     mockServer.post('/success', async (_req, reply) => {
