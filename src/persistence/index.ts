@@ -16,3 +16,6 @@ export {
   checkRedisConnection,
   closeRedisClient,
 } from './redis.js';
+
+export { WorkflowRepository } from './WorkflowRepository.js';
+export { SagaRepository } from './SagaRepository.js';
