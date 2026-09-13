@@ -1,7 +1,7 @@
 // ============================================================
-// SagaFlow — Application Entry Point
+// Chronos — Application Entry Point
 // ============================================================
-// Bootstraps the SagaFlow application:
+// Bootstraps the Chronos application:
 // 1. Loads and validates configuration
 // 2. Builds the Fastify app (with DB connections)
 // 3. Starts listening for HTTP requests
@@ -46,7 +46,7 @@ async function main(): Promise<void> {
       host: '0.0.0.0',
     });
 
-    app.log.info(`SagaFlow is running on port ${config.port}`);
+    app.log.info(`Chronos is running on port ${config.port}`);
     app.log.info(`Environment: ${config.nodeEnv}`);
     app.log.info(`Health check: http://localhost:${config.port}/health`);
   } catch (err) {

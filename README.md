@@ -1,4 +1,4 @@
-# SagaFlow
+# Chronos
 
 A crash-resilient distributed transaction & workflow orchestration engine implementing the Saga pattern.
 

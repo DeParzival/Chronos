@@ -1,5 +1,5 @@
 // ============================================================
-// SagaFlow — Unit Tests: Fastify Health Check
+// Chronos — Unit Tests: Fastify Health Check
 // ============================================================
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
@@ -14,7 +14,7 @@ describe('Health Check Endpoint', () => {
     port: 0,
     nodeEnv: 'test',
     logLevel: 'error',
-    databaseUrl: 'postgresql://sagaflow:sagaflow@localhost:5432/sagaflow',
+    databaseUrl: 'postgresql://Chronos:Chronos@localhost:5432/Chronos',
     redisUrl: 'redis://localhost:6379',
   };
 

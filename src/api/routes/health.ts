@@ -1,8 +1,8 @@
 // ============================================================
-// SagaFlow — Health Check Route
+// Chronos — Health Check Route
 // ============================================================
 // Provides a /health endpoint that reports the status of all
-// SagaFlow dependencies (PostgreSQL, Redis).
+// Chronos dependencies (PostgreSQL, Redis).
 // ============================================================
 
 import { type FastifyInstance } from 'fastify';

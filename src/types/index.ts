@@ -1,7 +1,7 @@
 // ============================================================
-// SagaFlow — Shared Type Definitions
+// Chronos — Shared Type Definitions
 // ============================================================
-// Central type definitions used across the entire SagaFlow engine.
+// Central type definitions used across the entire Chronos engine.
 // These types define the core domain model for sagas, workflows,
 // steps, and execution state.
 // ============================================================

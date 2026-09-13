@@ -1,5 +1,5 @@
 // ============================================================
-// SagaFlow — Zod Validation Schemas
+// Chronos — Zod Validation Schemas
 // ============================================================
 // Defines runtime validation schemas for workflow definitions,
 // saga creation requests, and API inputs. These schemas ensure

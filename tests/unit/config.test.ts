@@ -1,5 +1,5 @@
 // ============================================================
-// SagaFlow — Unit Test: Configuration Module
+// Chronos — Unit Test: Configuration Module
 // ============================================================
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
@@ -13,7 +13,7 @@ describe('Configuration', () => {
     process.env['PORT'] = '3000';
     process.env['NODE_ENV'] = 'test';
     process.env['LOG_LEVEL'] = 'info';
-    process.env['DATABASE_URL'] = 'postgresql://sagaflow:sagaflow@localhost:5432/sagaflow';
+    process.env['DATABASE_URL'] = 'postgresql://Chronos:Chronos@localhost:5432/Chronos';
     process.env['REDIS_URL'] = 'redis://localhost:6379';
   });
 
@@ -28,7 +28,7 @@ describe('Configuration', () => {
     expect(config.port).toBe(3000);
     expect(config.nodeEnv).toBe('test');
     expect(config.logLevel).toBe('info');
-    expect(config.databaseUrl).toBe('postgresql://sagaflow:sagaflow@localhost:5432/sagaflow');
+    expect(config.databaseUrl).toBe('postgresql://Chronos:Chronos@localhost:5432/Chronos');
     expect(config.redisUrl).toBe('redis://localhost:6379');
   });
 

@@ -1,5 +1,5 @@
 // ============================================================
-// SagaFlow — Configuration Module
+// Chronos — Configuration Module
 // ============================================================
 // Centralized configuration loaded from environment variables.
 // Uses Zod for validation to ensure all required config is present

@@ -1,5 +1,5 @@
 # ============================================================
-# SagaFlow — Multi-stage Dockerfile
+# Chronos — Multi-stage Dockerfile
 # ============================================================
 # Stage 1: Build — install deps, compile TypeScript
 # Stage 2: Production — lean image with only compiled output
@@ -38,9 +38,9 @@ RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 
 # Create non-root user
-RUN addgroup -g 1001 -S sagaflow && \
-    adduser -S sagaflow -u 1001
-USER sagaflow
+RUN addgroup -g 1001 -S Chronos && \
+    adduser -S Chronos -u 1001
+USER Chronos
 
 # Expose default port
 EXPOSE 3000

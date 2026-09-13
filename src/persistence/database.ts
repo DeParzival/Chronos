@@ -1,5 +1,5 @@
 // ============================================================
-// SagaFlow — PostgreSQL Database Module
+// Chronos — PostgreSQL Database Module
 // ============================================================
 // Manages the PostgreSQL connection pool, schema initialization,
 // and provides a query interface for the persistence layer.
@@ -68,7 +68,7 @@ export async function checkConnection(dbPool: pg.Pool): Promise<boolean> {
 /**
  * Initialize the database schema.
  *
- * Creates all tables required by SagaFlow if they don't exist.
+ * Creates all tables required by Chronos if they don't exist.
  * Uses IF NOT EXISTS so it's safe to run on every startup.
  */
 export async function initializeSchema(dbPool: pg.Pool): Promise<void> {

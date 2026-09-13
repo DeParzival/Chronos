@@ -1,5 +1,5 @@
 // ============================================================
-// SagaFlow — Redis Client Module
+// Chronos — Redis Client Module
 // ============================================================
 // Manages the Redis connection for:
 // - Distributed locks/leases (Phase 6)

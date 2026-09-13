@@ -1,5 +1,5 @@
 {
-  "name": "sagaflow",
+  "name": "Chronos",
   "version": "0.1.0",
   "description": "A crash-resilient distributed transaction & workflow orchestration engine implementing the Saga pattern",
   "type": "module",

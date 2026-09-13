@@ -1,27 +1,27 @@
 # ============================================================
-# SagaFlow — Docker Compose
+# Chronos — Docker Compose
 # ============================================================
 # Complete local development environment:
-# - SagaFlow orchestration engine
+# - Chronos orchestration engine
 # - PostgreSQL (durable persistence)
 # - Redis (fast coordination)
 # - Mock microservices (payment, inventory, shipping)
 # ============================================================
 
 services:
-  # ── SagaFlow Engine ──────────────────────────────────────
-  sagaflow:
+  # ── Chronos Engine ──────────────────────────────────────
+  Chronos:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: sagaflow
+    container_name: Chronos
     ports:
       - "3000:3000"
     environment:
       PORT: 3000
       NODE_ENV: development
       LOG_LEVEL: info
-      DATABASE_URL: postgresql://sagaflow:sagaflow@postgres:5432/sagaflow
+      DATABASE_URL: postgresql://Chronos:Chronos@postgres:5432/Chronos
       REDIS_URL: redis://redis:6379
     depends_on:
       postgres:
@@ -30,33 +30,33 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - sagaflow-network
+      - Chronos-network
 
   # ── PostgreSQL ───────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
-    container_name: sagaflow-postgres
+    container_name: Chronos-postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: sagaflow
-      POSTGRES_PASSWORD: sagaflow
-      POSTGRES_DB: sagaflow
+      POSTGRES_USER: Chronos
+      POSTGRES_PASSWORD: Chronos
+      POSTGRES_DB: Chronos
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sagaflow"]
+      test: ["CMD-SHELL", "pg_isready -U Chronos"]
       interval: 5s
       timeout: 5s
       retries: 5
     restart: unless-stopped
     networks:
-      - sagaflow-network
+      - Chronos-network
 
   # ── Redis ────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
-    container_name: sagaflow-redis
+    container_name: Chronos-redis
     ports:
       - "6379:6379"
     volumes:
@@ -68,13 +68,13 @@ services:
       retries: 5
     restart: unless-stopped
     networks:
-      - sagaflow-network
+      - Chronos-network
 
   # ── Mock Payment Service ─────────────────────────────────
   # Placeholder — will be fully implemented in Phase 8
   payment-service:
     image: node:20-alpine
-    container_name: sagaflow-payment
+    container_name: Chronos-payment
     working_dir: /app
     volumes:
       - ./services/payment-service:/app
@@ -85,12 +85,12 @@ services:
       PORT: 4001
       SERVICE_NAME: payment-service
     networks:
-      - sagaflow-network
+      - Chronos-network
 
   # ── Mock Inventory Service ───────────────────────────────
   inventory-service:
     image: node:20-alpine
-    container_name: sagaflow-inventory
+    container_name: Chronos-inventory
     working_dir: /app
     volumes:
       - ./services/inventory-service:/app
@@ -101,12 +101,12 @@ services:
       PORT: 4002
       SERVICE_NAME: inventory-service
     networks:
-      - sagaflow-network
+      - Chronos-network
 
   # ── Mock Shipping Service ────────────────────────────────
   shipping-service:
     image: node:20-alpine
-    container_name: sagaflow-shipping
+    container_name: Chronos-shipping
     working_dir: /app
     volumes:
       - ./services/shipping-service:/app
@@ -117,7 +117,7 @@ services:
       PORT: 4003
       SERVICE_NAME: shipping-service
     networks:
-      - sagaflow-network
+      - Chronos-network
 
 # ── Volumes ──────────────────────────────────────────────
 volumes:
@@ -128,5 +128,5 @@ volumes:
 
 # ── Networks ─────────────────────────────────────────────
 networks:
-  sagaflow-network:
+  Chronos-network:
     driver: bridge

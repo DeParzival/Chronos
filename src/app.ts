@@ -1,5 +1,5 @@
 // ============================================================
-// SagaFlow — Fastify Server Setup
+// Chronos — Fastify Server Setup
 // ============================================================
 // Creates and configures the Fastify application instance with
 // logging, error handling, database connections, and routes.
