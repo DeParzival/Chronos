@@ -11,6 +11,7 @@ import { createPool, initializeSchema } from './persistence/database.js';
 import { createRedisClient } from './persistence/redis.js';
 import { registerHealthRoute } from './api/routes/health.js';
 import { registerWorkflowRoutes } from './api/routes/workflows.js';
+import { registerSagaRoutes } from './api/routes/sagas.js';
 
 /**
  * Build and configure the Fastify application.
@@ -101,6 +102,7 @@ export async function buildApp(
   await app.register(registerHealthRoute);
   if (!options.skipDb) {
     await app.register(registerWorkflowRoutes);
+    await app.register(registerSagaRoutes);
   }
 
   return app;
