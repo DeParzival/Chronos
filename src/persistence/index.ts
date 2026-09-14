@@ -19,3 +19,4 @@ export {
 
 export { WorkflowRepository } from './WorkflowRepository.js';
 export { SagaRepository } from './SagaRepository.js';
+export { EventRepository } from './EventRepository.js';
